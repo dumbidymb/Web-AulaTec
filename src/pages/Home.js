@@ -3,21 +3,36 @@ import '../sources/Home.css';
 import Sidebar from '../components/Sidebar';
 import Male from "../assets/Perfil.png";
 import Fondo from "../assets/fondo.jpg";
+import { useNavigate } from 'react-router-dom';
+import { Reparaciones } from './Reparaciones';
 
 export const Home = () => {
   const [showButtons, setShowButtons] = useState(false);
+  const navigate = useNavigate();
 
   const handleTargetClick = () => {
     setShowButtons(true);
+  };
+
+  const handleNavigate = () => {
+    navigate('/listap');
+  };
+
+  const handllISTA = () => {
+    navigate('/listapr');
+  };
+
+  const handReparar = () => {
+    navigate('/reparaciones');
   };
 
   return (
     <>
       <nav className='navbar'>
         <div className='nav-links'>
-          <a href="#profesores" className='nav-link'>Lista de Profesores</a>
-          <a href="#canones" className='nav-link'>Lista de Cañones</a>
-          <a href="#reparaciones" className='nav-link'>Reparaciones</a>
+          <a onClick={handleNavigate} href="#profesores" className='nav-link'>Lista de Profesores</a>
+          <a onClick={handllISTA} href="#canones" className='nav-link'>Lista de Cañones</a>
+          <a href="#reparaciones" onClick={handReparar} className='nav-link'>Reparaciones</a>
         </div>
       </nav>
 

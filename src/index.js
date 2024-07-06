@@ -9,6 +9,7 @@ import { Home } from './pages/Home';
 import reportWebVitals from './reportWebVitals';
 import { LProfesores } from './pages/LProfesores';
 import { LProyectores } from './pages/LProyectores';
+import { Reparaciones } from './pages/Reparaciones';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,6 +22,7 @@ root.render(
         <Route path="/inicio" element={<Home/>} />
         <Route path="/listap" element={<LProfesores/>} />
         <Route path="/listapr" element={<LProyectores/>} />
+        <Route path="/reparaciones" element={<Reparaciones/>} />
       </Routes>
     </Router>
   </React.StrictMode>

@@ -1,17 +1,23 @@
 import '../sources/Home.css'
 import '../sources/LP.css'
 import Fondo from "../assets/fondo.jpg";
-import Male from "../assets/Perfil.png";
+import CAñom from "../assets/cañon.png";
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const LProyectores = () => {
   const [cards, setCards] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+  const [newProjector, setNewProjector] = useState({ name: '', details: '' });
+  const navigate = useNavigate();
 
   const addCard = () => {
-    setCards([...cards, cards.length + 1]);
+    setCards([...cards, { ...newProjector, id: cards.length + 1 }]);
+    setNewProjector({ name: '', details: '' }); // Reset the new projector form
+    setIsAddModalVisible(false);
   };
 
   const toggleSelectionMode = () => {
@@ -27,26 +33,31 @@ export const LProyectores = () => {
     }
   };
 
+  const handleNavigate = () => {
+    navigate('/inicio');
+  };
+
   const removeSelectedCards = () => {
     setCards(cards.filter((_, index) => !selectedCards.includes(index)));
     setIsSelectionMode(false);
     setSelectedCards([]);
-    setIsModalVisible(false);
+    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteClick = () => {
-    setIsModalVisible(true);
+    setIsDeleteModalVisible(true);
   };
 
   const handleCancelClick = () => {
-    setIsModalVisible(false);
+    setIsAddModalVisible(false);
+    setIsDeleteModalVisible(false);
   };
 
   return (
     <>
       <nav className='navbar'>
         <div className='nav-links'>
-          <a href="#profesores" className='nav-link'>Regresar</a>
+          <a onClick={handleNavigate} href="#profesores" className='nav-link'>Regresar</a>
         </div>
       </nav>
 
@@ -70,12 +81,12 @@ export const LProyectores = () => {
                 onClick={() => isSelectionMode && toggleCardSelection(index)}
               >
                 {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(index)} onChange={() => toggleCardSelection(index)} />}
-                <img src={Male} alt="Avatar" className="avatar" />
+                <img src={CAñom} alt="Avatar" className="avatar" />
               </div>
             ))}
           </div>
           <div className="buttons">
-            <button onClick={addCard} className="button add">+</button>
+            <button onClick={() => setIsAddModalVisible(true)} className="button add">+</button>
             <button onClick={toggleSelectionMode} className="button remove">🗑️</button>
             {isSelectionMode && (
               <>
@@ -85,7 +96,35 @@ export const LProyectores = () => {
             )}
           </div>
         </div>
-        {isModalVisible && (
+        {isAddModalVisible && (
+          <div className="modal">
+            <div className="modal-content">
+              <p>Agregar un nuevo proyector</p>
+              <div className="modal-form">
+                <img src={CAñom} alt="Avatar" className="avatar" />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Nombre"
+                    value={newProjector.name}
+                    onChange={(e) => setNewProjector({ ...newProjector, name: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Detalles"
+                    value={newProjector.details}
+                    onChange={(e) => setNewProjector({ ...newProjector, details: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="modal-buttons">
+                <button onClick={addCard} className="modal-button yes">Añadir</button>
+                <button onClick={handleCancelClick} className="modal-button no">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        )}
+        {isDeleteModalVisible && (
           <div className="modal">
             <div className="modal-content">
               <p>¿Estás seguro de que quieres eliminar las tarjetas seleccionadas?</p>

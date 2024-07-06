@@ -1,0 +1,113 @@
+.boidi{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.division-1{
+    flex: 1;
+    height: 98vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.division-2{
+    flex: 1.5;
+    background-color: #FCFFE4;
+    height: 98vh;
+    display: flex;
+    justify-content: center;
+    align-items:center ;
+}
+
+.division-2 img{
+    width: 90vh;
+}
+
+.division-2 svg{
+    width: 20vh;
+}
+
+.text-log{
+    width: 47%;
+    display: flex;
+    justify-content: start;
+    height: 50%;
+    align-items: center;
+ font-style: italic;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ font-weight: 400;
+ font-size: 7vh;
+}
+.entrar{
+    width: 50%;
+    height: 50%;
+    display: flex;
+flex-direction: column;
+align-items: center;
+
+
+}
+
+.input-log{
+    margin-bottom: 5vh;
+border: none;
+border: 1px solid #ccc;
+border-radius: 4px;
+outline: none;
+box-sizing: border-box;
+}
+
+
+
+.input-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-container input {
+    width: 350px;
+    padding: 10px 5px;
+    border: none;
+    border-bottom: 2px solid #90CAF9;
+    background: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.input-container label {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    font-size: 16px;
+    color: #aaa;
+    transition: 0.2s ease all;
+    pointer-events: none;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.input-container input:focus ~ label,
+.input-container input:valid ~ label {
+    top: -10px;
+    font-size: 12px;
+
+}
+
+.input-container input:focus {
+    border-bottom: 2px solid #90CAF9;
+}
+
+
+.button-log{
+    width: 15vh;
+    height: 5vh;
+    border-radius: 15px;
+    background-color: #83B4FF;
+    border: none;
+    color: white;
+    font-weight: 300;
+    font-size: 2vh;
+}
+

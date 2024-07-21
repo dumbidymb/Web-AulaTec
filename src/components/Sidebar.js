@@ -3,6 +3,8 @@ import '../sources/sidebar.css';
 import Nohay from "../assets/nohay.png";
 import Male from "../assets/male.png";
 import Timeline from './Timeline';
+import Idcard from './Idcard';
+import BarChartComponent from './BarChartComponent';
 
 const Sidebar = ({ showButtons }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,9 +31,11 @@ const Sidebar = ({ showButtons }) => {
           </div>
           <div className='subcont-2-1'>
             <div className='bt-subcont'>
-              <button>Estadistica de uso</button>
-              <button>Informacion general</button>
+        
+   <Idcard/>
+<BarChartComponent/>
             </div>
+            
           
           </div>
           </div>

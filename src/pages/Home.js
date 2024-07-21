@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../sources/Home.css';
 import Sidebar from '../components/Sidebar';
+
 import Male from "../assets/Perfil.png";
 import Fondo from "../assets/fondo.jpg";
 import { useNavigate } from 'react-router-dom';
@@ -26,10 +27,15 @@ export const Home = () => {
     navigate('/reparaciones');
   };
 
+  const handEstadisticas = () => {
+    navigate('/estadisticas');
+  };
+
   return (
     <>
       <nav className='navbar'>
         <div className='nav-links'>
+        <a onClick={handEstadisticas} href="#profesores" className='nav-link'>Estadisticas generales</a>
           <a onClick={handleNavigate} href="#profesores" className='nav-link'>Lista de Profesores</a>
           <a onClick={handllISTA} href="#canones" className='nav-link'>Lista de Cañones</a>
           <a href="#reparaciones" onClick={handReparar} className='nav-link'>Reparaciones</a>
@@ -53,7 +59,7 @@ export const Home = () => {
             {[...Array(12)].map((_, i) => (
               <div key={i} className='target-home' onClick={handleTargetClick}>
                 <img style={{ width: 100 }} src={Male} alt="Descripción de la imagen" />
-                <a>Mr. Felipe Arrazola</a>
+                <a>M. Felipe Arrazola</a>
               </div>
             ))}
           </div>

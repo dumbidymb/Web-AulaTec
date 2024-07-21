@@ -1,0 +1,79 @@
+.bodi-estadistica{
+width: 100%;
+height: 200vh;
+display: flex;
+flex-direction: column;
+
+}
+
+ .part-1{
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center ;
+
+}
+
+.part-2{
+   
+   flex-direction: column;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center ;
+
+}
+
+.part-profe{    
+height: 100%;
+width: 80%;
+
+
+}
+
+.part-proyector{
+    height: 100%;
+    width: 80%;
+
+}
+
+.cont-graficas-prof{
+width: 100%;
+height: 100%;
+
+
+display: flex;
+flex-wrap: wrap;
+}
+
+.grafica-histo{
+width: 48%;
+height: 45vh;
+
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+border-radius: 10px;
+
+}
+
+.grafica-barras{
+    width: 48%;
+    height: 45vh;
+    margin-left: 5vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.grafica-dispersion{
+    width: 48%;
+    height: 45vh;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.cont0-graficas-proy{
+     
+}
+    
+    

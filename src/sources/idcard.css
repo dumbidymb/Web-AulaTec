@@ -1,0 +1,63 @@
+.id-card {
+    width: 500px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    font-family: Arial, sans-serif;
+    margin-top: 2vh;
+    margin-left: 2.7vh;
+  }
+  
+  .id-card-header {
+    text-align: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+    width: 100%;
+  }
+  
+  .id-card-body {
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+  }
+  
+  .photo-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+  }
+  
+  .photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .info-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 200px;
+    padding-left: 10px;
+  }
+  
+  .info {
+    margin-bottom: 10px;
+  }
+  
+  .info h2 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+  }
+  
+  .info p {
+    margin: 2px 0;
+    font-size: 14px;
+  }
+  

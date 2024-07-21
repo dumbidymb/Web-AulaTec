@@ -3,7 +3,7 @@
   position: absolute; /* Change to absolute positioning */
   right: 0;
   width: 50vh; /* Width when collapsed */
-  height: 75%;
+  height: 80%;
   background-color: #ffffff;
   box-shadow: -2px 0 5px rgba(0,0,0,0.5);
   transition: width 0.3s ease;
@@ -75,7 +75,7 @@
 .subcont-2 {
   height: 40%;
   display: flex;
-  width: 65%;
+  width: 45%;
   flex-direction: column;
   align-items: start;
 justify-content: space-around;
@@ -86,7 +86,9 @@ justify-content: space-around;
   height: 100%;
   display: flex;
   width: 65%;
-    
+    overflow: auto  ;
+
+
 
 
 }
@@ -101,6 +103,7 @@ justify-content: space-around;
 .bt-subcont {
   width: 50%;
   height: 100%;
+
 
 }
 

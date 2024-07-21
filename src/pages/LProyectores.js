@@ -82,8 +82,9 @@ export const LProyectores = () => {
               >
                 {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(index)} onChange={() => toggleCardSelection(index)} />}
                 <img src={CAñom} alt="Avatar" className="avatar" />
+              <div className='viñeta'></div>
               </div>
-            ))}
+            ))}  
           </div>
           <div className="buttons">
             <button onClick={() => setIsAddModalVisible(true)} className="button add">+</button>
@@ -102,18 +103,25 @@ export const LProyectores = () => {
               <p>Agregar un nuevo proyector</p>
               <div className="modal-form">
                 <img src={CAñom} alt="Avatar" className="avatar" />
-                <div>
+                <div className='input-group'>
+            
                   <input
                     type="text"
-                    placeholder="Nombre"
-                    value={newProjector.name}
-                    onChange={(e) => setNewProjector({ ...newProjector, name: e.target.value })}
+                    placeholder="Marca"
+                    
+                    onChange={(e) => setNewProjector({  details: e.target.value })}
                   />
-                  <input
+                    <input
                     type="text"
-                    placeholder="Detalles"
-                    value={newProjector.details}
-                    onChange={(e) => setNewProjector({ ...newProjector, details: e.target.value })}
+                    placeholder="Numero de serie"
+                  
+                    onChange={(e) => setNewProjector({  details: e.target.value })}
+                  />
+                    <input
+                    type="text"
+                    placeholder="Lumen"
+                 
+                    onChange={(e) => setNewProjector({  details: e.target.value })}
                   />
                 </div>
               </div>

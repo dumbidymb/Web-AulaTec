@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals';
 import { LProfesores } from './pages/LProfesores';
 import { LProyectores } from './pages/LProyectores';
 import { Reparaciones } from './pages/Reparaciones';
+import { Estadisticas } from './pages/Estadisticas';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,6 +24,7 @@ root.render(
         <Route path="/listap" element={<LProfesores/>} />
         <Route path="/listapr" element={<LProyectores/>} />
         <Route path="/reparaciones" element={<Reparaciones/>} />
+        <Route path="/estadisticas" element={<Estadisticas/>} />
       </Routes>
     </Router>
   </React.StrictMode>

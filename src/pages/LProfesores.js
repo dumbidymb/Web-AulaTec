@@ -1,8 +1,9 @@
-import '../sources/Home.css'
 import '../sources/LP.css'
+import '../sources/Home.css'
 import Fondo from '../assets/fondo.jpg';
 import Male from '../assets/Perfil.png';
 import Male2 from '../assets/Male2.png';
+import NotificationIcon from '../assets/alarma.png'; // Añadir ícono de notificación
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +13,10 @@ export const LProfesores = () => {
   const [selectedCards, setSelectedCards] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [isNotifyModalVisible, setIsNotifyModalVisible] = useState(false);
   const [newProfessor, setNewProfessor] = useState({ name: '', photo: Male });
+  const [notifyMessage, setNotifyMessage] = useState('');
+  const [currentProfessor, setCurrentProfessor] = useState(null);
   const navigate = useNavigate();
 
   const addCard = () => {
@@ -68,6 +72,18 @@ export const LProfesores = () => {
     });
   };
 
+  const handleNotifyClick = (index) => {
+    setCurrentProfessor(cards[index]);
+    setIsNotifyModalVisible(true);
+  };
+
+  const handleSendNotification = () => {
+    // Lógica para enviar la notificación
+    console.log(`Notificación enviada a ${currentProfessor.name}: ${notifyMessage}`);
+    setIsNotifyModalVisible(false);
+    setNotifyMessage('');
+  };
+
   return (
     <>
       <nav className='navbar'>
@@ -98,6 +114,12 @@ export const LProfesores = () => {
                 {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(index)} onChange={() => toggleCardSelection(index)} />}
                 <img src={card.photo ? card.photo : Male} alt="Avatar" className="avatar" />
                 <p>{card.name ? card.name : `Profesor ${index + 1}`}</p>
+                <img 
+                  src={NotificationIcon} 
+                  alt="Notificar" 
+                  className="notification-icon" 
+                  onClick={() => handleNotifyClick(index)}
+                />
               </div>
             ))}
           </div>
@@ -139,18 +161,43 @@ export const LProfesores = () => {
                     value={newProfessor.name}
                     onChange={(e) => setNewProfessor({ ...newProfessor, name: e.target.value })}
                   />
-                    <label>Materia:</label>
-                     <input
+                  <label>Materia:</label>
+                  <input
                     type="text"
-                    value={newProfessor.name}
-                    onChange={(e) => setNewProfessor({ ...newProfessor, name: e.target.value })}
+                    value={newProfessor.subject}
+                    onChange={(e) => setNewProfessor({ ...newProfessor, subject: e.target.value })}
                   />
-
+                    <label>Correo electronico:</label>
+                  <input
+                    type="gmail"
+                    value={newProfessor.subject}
+                    onChange={(e) => setNewProfessor({ ...newProfessor, subject: e.target.value })}
+                  />
                 </div>
                 <div className="modal-buttons">
                   <button onClick={handleAddProfessor} className="modal-button yes">Añadir</button>
                   <button onClick={() => setIsAddModalVisible(false)} className="modal-button no">Cancelar</button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {isNotifyModalVisible && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Notificación</h2>
+              <p>¿De qué quieres notificar al maestro?</p>
+
+              <div className='modal-buttons'>
+
+       <button className='modal-button yes'>Regresar el cañon.</button>
+       
+       <button className='modal-button yes'>Reportar el estado del cañon</button>
+  
+              </div>
+              <div className="modal-buttons">
+                <button onClick={handleSendNotification} className="modal-button-notf">Notificar</button>
+                <button onClick={() => setIsNotifyModalVisible(false)} className="modal-button-notf">Cancelar</button>
               </div>
             </div>
           </div>

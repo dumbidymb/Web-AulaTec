@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../sources/login.css';
 import LogoLog from "../assets/LogoLog.png";
 
+
 export const Login = () => {
   const [nombre, setNombre] = useState('');
   const [contrasena, setContrasena] = useState('');
@@ -34,9 +35,7 @@ export const Login = () => {
     <>
       <div className='boidi'>
         <div className='division-1'>
-          <div className='text-log'>
-            Login
-          </div>
+          <div className='text-log'>Login</div>
           <form className='entrar' onSubmit={handleLogin}>
             <div className="input-container">
               <input
@@ -58,10 +57,12 @@ export const Login = () => {
               />
               <label htmlFor="contrasena">Contraseña</label>
             </div>
-            <button className='button-log' type="submit">
-              Entrar
-            </button>
+            <button className='button-log' type="submit">Entrar</button>
           </form>
+          <div className="switch-auth">
+            <span>¿No tienes cuenta?</span>
+            <a href="/registro">Regístrate aquí</a>
+          </div>
         </div>
         <div className='division-2'>
           <img src={LogoLog} alt="Descripción de la imagen" />

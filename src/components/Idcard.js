@@ -3,7 +3,7 @@ import "../sources/idcard.css"
 import Cañon from "../assets/cañon.png"
 import Profe from "../assets/male.png"
 
-const Idcard = () => {
+const Idcard = ({ selectedPrestamo }) => {
   return (
     <div className="id-card">
       <div className="id-card-header">
@@ -18,13 +18,14 @@ const Idcard = () => {
         <div className="info-section">
           <div className="info">
             <h2>Información del Maestro</h2>
-            <p>Nombre: jose sluis estrada pineda </p>
-            <p>Materia: matematicas</p>
+            <p>Nombre: {selectedPrestamo.maestro.nombre} {selectedPrestamo.maestro.ape_paterno} {selectedPrestamo.maestro.ape_materno}</p>
+            <p>Correo: {selectedPrestamo.maestro.correo}</p>
           </div>
           <div className="info">
             <h2>Información del Proyector</h2>
-            <p>Marca: z100 sonic </p>
-            <p>lumenes: 5000</p>
+            <p>Marca: {selectedPrestamo.proyector.marca}</p>
+            <p>Estado: {selectedPrestamo.proyector.status}</p>
+            <p>Número de Serie: {selectedPrestamo.proyector.numero_serie}</p>
           </div>
         </div>
       </div>

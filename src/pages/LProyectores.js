@@ -1,47 +1,82 @@
-import '../sources/Home.css'
-import '../sources/LP.css'
+import '../sources/Home.css';
+import '../sources/LP.css';
 import Fondo from "../assets/fondo.jpg";
 import CAñom from "../assets/cañon.png";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const LProyectores = () => {
-  const [cards, setCards] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [cards, setCards] = useState([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [newProjector, setNewProjector] = useState({ name: '', details: '' });
+  const [isToggleStatusModalVisible, setIsToggleStatusModalVisible] = useState(false);
+  const [newProjector, setNewProjector] = useState({ marca: '', numero_serie: '', lumens: '', status: '' });
+  const [selectedCardForToggle, setSelectedCardForToggle] = useState(null);
   const navigate = useNavigate();
 
-  const addCard = () => {
-    setCards([...cards, { ...newProjector, id: cards.length + 1 }]);
-    setNewProjector({ name: '', details: '' }); // Reset the new projector form
-    setIsAddModalVisible(false);
+  useEffect(() => {
+    const fetchProjectors = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/proyectores');
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error('Failed to fetch projectors');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchProjectors();
+  }, []);
+
+  const addCard = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/proyectores/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          marca: newProjector.marca,
+          numero_serie: newProjector.numero_serie,
+          lumens: newProjector.lumens,
+          status: newProjector.status || 'habilitado'
+        })
+      });
+
+      if (response.ok) {
+        const proyector = await response.json();
+        setCards([...cards, proyector]);
+        setIsAddModalVisible(false);
+        setNewProjector({ marca: '', numero_serie: '', lumens: '', status: '' });
+      } else {
+        console.error('Error adding projector');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const toggleSelectionMode = () => {
     setIsSelectionMode(!isSelectionMode);
-    setSelectedCards([]); // Reset selected cards when entering/exiting selection mode
+    setSelectedCards([]);
   };
 
-  const toggleCardSelection = (index) => {
-    if (selectedCards.includes(index)) {
-      setSelectedCards(selectedCards.filter(i => i !== index));
+  const toggleCardSelection = (id) => {
+    if (selectedCards.includes(id)) {
+      setSelectedCards(selectedCards.filter(i => i !== id));
     } else {
-      setSelectedCards([...selectedCards, index]);
+      setSelectedCards([...selectedCards, id]);
     }
   };
 
   const handleNavigate = () => {
     navigate('/inicio');
-  };
-
-  const removeSelectedCards = () => {
-    setCards(cards.filter((_, index) => !selectedCards.includes(index)));
-    setIsSelectionMode(false);
-    setSelectedCards([]);
-    setIsDeleteModalVisible(false);
   };
 
   const handleDeleteClick = () => {
@@ -51,6 +86,56 @@ export const LProyectores = () => {
   const handleCancelClick = () => {
     setIsAddModalVisible(false);
     setIsDeleteModalVisible(false);
+    setIsToggleStatusModalVisible(false);
+  };
+
+  const deleteSelectedCards = async () => {
+    try {
+      await Promise.all(selectedCards.map(async (id) => {
+        const response = await fetch(`http://localhost:5000/proyectores/${id}`, {
+          method: 'DELETE'
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to delete projector with id ${id}`);
+        }
+      }));
+      setCards(cards.filter(card => !selectedCards.includes(card.id)));
+      setIsDeleteModalVisible(false);
+      setIsSelectionMode(false);
+      setSelectedCards([]);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleToggleStatusClick = (card) => {
+    setSelectedCardForToggle(card);
+    setIsToggleStatusModalVisible(true);
+  };
+
+  const toggleStatus = async () => {
+    if (!selectedCardForToggle) return;
+  
+    try {
+      const updatedStatus = selectedCardForToggle.status === 'habilitado' ? 'deshabilitado' : 'habilitado';
+      const response = await fetch(`http://localhost:5000/proyectores/toggle_status/${selectedCardForToggle.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: updatedStatus }) 
+      });
+  
+      if (response.ok) {
+        const proyector = await response.json();
+        setCards(cards.map(card => card.id === proyector.id ? { ...card, status: proyector.status } : card));
+        setIsToggleStatusModalVisible(false);
+      } else {
+        console.error('Error updating status');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -66,25 +151,30 @@ export const LProyectores = () => {
           <img src={Fondo} alt="Background" className='header-image' />
           <div className='header-text'>
             <h1>AulaTec</h1>
-            <p>El control esta en tus manos.</p>
+            <p>El control está en tus manos.</p>
           </div>
         </div>
       </div>
 
-      <body className='bodi-lp'>
+      <div className='bodi-lp'>
         <div className="card-container">
           <div className="cards">
-            {cards.map((card, index) => (
+            {cards.map((card) => (
               <div
-                key={index}
-                className={`card ${isSelectionMode ? 'selectable' : ''} ${selectedCards.includes(index) ? 'selected' : ''}`}
-                onClick={() => isSelectionMode && toggleCardSelection(index)}
+                key={card.id}
+                className={`card ${isSelectionMode ? 'selectable' : ''} ${selectedCards.includes(card.id) ? 'selected' : ''}`}
+                onClick={() => isSelectionMode && toggleCardSelection(card.id)}
               >
-                {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(index)} onChange={() => toggleCardSelection(index)} />}
+                {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(card.id)} onChange={() => toggleCardSelection(card.id)} />}
                 <img src={CAñom} alt="Avatar" className="avatar" />
-              <div className='viñeta'></div>
+                <div className="card-content">
+                  <p>Marca: {card.marca}</p>
+                  <p>Número de Serie: {card.numero_serie}</p>
+                  <p>Lumens: {card.lumens}</p>
+                  <button className={`viñeta ${card.status === 'habilitado' ? 'green' : 'red'}`} onClick={() => handleToggleStatusClick(card)}></button>
+                </div>
               </div>
-            ))}  
+            ))}
           </div>
           <div className="buttons">
             <button onClick={() => setIsAddModalVisible(true)} className="button add">+</button>
@@ -104,24 +194,23 @@ export const LProyectores = () => {
               <div className="modal-form">
                 <img src={CAñom} alt="Avatar" className="avatar" />
                 <div className='input-group'>
-            
                   <input
                     type="text"
                     placeholder="Marca"
-                    
-                    onChange={(e) => setNewProjector({  details: e.target.value })}
+                    value={newProjector.marca}
+                    onChange={(e) => setNewProjector({ ...newProjector, marca: e.target.value })}
                   />
-                    <input
+                  <input
                     type="text"
-                    placeholder="Numero de serie"
-                  
-                    onChange={(e) => setNewProjector({  details: e.target.value })}
+                    placeholder="Número de serie"
+                    value={newProjector.numero_serie}
+                    onChange={(e) => setNewProjector({ ...newProjector, numero_serie: e.target.value })}
                   />
-                    <input
+                  <input
                     type="text"
                     placeholder="Lumen"
-                 
-                    onChange={(e) => setNewProjector({  details: e.target.value })}
+                    value={newProjector.lumens}
+                    onChange={(e) => setNewProjector({ ...newProjector, lumens: e.target.value })}
                   />
                 </div>
               </div>
@@ -137,13 +226,24 @@ export const LProyectores = () => {
             <div className="modal-content">
               <p>¿Estás seguro de que quieres eliminar las tarjetas seleccionadas?</p>
               <div className="modal-buttons">
-                <button onClick={removeSelectedCards} className="modal-button yes">Sí</button>
+                <button onClick={deleteSelectedCards} className="modal-button yes">Sí</button>
                 <button onClick={handleCancelClick} className="modal-button no">No</button>
               </div>
             </div>
           </div>
         )}
-      </body>
+        {isToggleStatusModalVisible && (
+          <div className="modal">
+            <div className="modal-content">
+              <p>¿Estás seguro de que quieres {selectedCardForToggle?.status === 'habilitado' ? 'deshabilitar' : 'habilitar'} este cañón?</p>
+              <div className="modal-buttons">
+                <button onClick={toggleStatus} className="modal-button yes">Sí</button>
+                <button onClick={handleCancelClick} className="modal-button no">No</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 };

@@ -1,31 +1,69 @@
-import '../sources/LP.css'
-import '../sources/Home.css'
+import '../sources/LP.css';
+import '../sources/Home.css';
 import Fondo from '../assets/fondo.jpg';
 import Male from '../assets/Perfil.png';
 import Male2 from '../assets/Male2.png';
-import NotificationIcon from '../assets/alarma.png'; // Añadir ícono de notificación
-import React, { useState } from 'react';
+import NotificationIcon from '../assets/alarma.png';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const LProfesores = () => {
-  const [cards, setCards] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  const [cards, setCards] = useState([]);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const [isNotifyModalVisible, setIsNotifyModalVisible] = useState(false);
-  const [newProfessor, setNewProfessor] = useState({ name: '', photo: Male });
+  const [newProfessor, setNewProfessor] = useState({ nombre: '', ape_paterno: '', ape_materno: '', correo: '' });
   const [notifyMessage, setNotifyMessage] = useState('');
   const [currentProfessor, setCurrentProfessor] = useState(null);
   const navigate = useNavigate();
 
-  const addCard = () => {
-    setCards([...cards, cards.length + 1]);
+  useEffect(() => {
+    // Fetch professors from the backend
+    const fetchProfessors = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/maestros/');
+        if (response.ok) {
+          const data = await response.json();
+          setCards(data);
+        } else {
+          console.error('Failed to fetch professors');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchProfessors();
+  }, []);
+
+  const addCard = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/maestros/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newProfessor)
+      });
+
+      if (response.ok) {
+        const professor = await response.json();
+        setCards([...cards, professor]);
+        setIsAddModalVisible(false);
+        setNewProfessor({ nombre: '', ape_paterno: '', ape_materno: '', correo: '' });
+      } else {
+        console.error('Error adding professor');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const toggleSelectionMode = () => {
     setIsSelectionMode(!isSelectionMode);
-    setSelectedCards([]); // Reset selected cards when entering/exiting selection mode
+    setSelectedCards([]);
   };
 
   const handleNavigate = () => {
@@ -40,11 +78,27 @@ export const LProfesores = () => {
     }
   };
 
-  const removeSelectedCards = () => {
-    setCards(cards.filter((_, index) => !selectedCards.includes(index)));
-    setIsSelectionMode(false);
-    setSelectedCards([]);
-    setIsModalVisible(false);
+  const removeSelectedCards = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/maestros/delete_multiple', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ maestro_ids: selectedCards.map(i => cards[i].id) })
+      });
+
+      if (response.ok) {
+        setCards(cards.filter((_, index) => !selectedCards.includes(index)));
+        setIsSelectionMode(false);
+        setSelectedCards([]);
+        setIsModalVisible(false);
+      } else {
+        console.error('Error deleting professors');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const handleDeleteClick = () => {
@@ -57,12 +111,6 @@ export const LProfesores = () => {
 
   const handleAddClick = () => {
     setIsAddModalVisible(true);
-  };
-
-  const handleAddProfessor = () => {
-    setCards([...cards, { name: newProfessor.name, photo: newProfessor.photo }]);
-    setIsAddModalVisible(false);
-    setNewProfessor({ name: '', photo: Male });
   };
 
   const handlePhotoChange = () => {
@@ -78,8 +126,7 @@ export const LProfesores = () => {
   };
 
   const handleSendNotification = () => {
-    // Lógica para enviar la notificación
-    console.log(`Notificación enviada a ${currentProfessor.name}: ${notifyMessage}`);
+    console.log(`Notificación enviada a ${currentProfessor.nombre}: ${notifyMessage}`);
     setIsNotifyModalVisible(false);
     setNotifyMessage('');
   };
@@ -97,7 +144,7 @@ export const LProfesores = () => {
           <img src={Fondo} alt="Background" className='header-image' />
           <div className='header-text'>
             <h1>AulaTec</h1>
-            <p>El control esta en tus manos.</p>
+            <p>El control está en tus manos.</p>
           </div>
         </div>
       </div>
@@ -107,17 +154,19 @@ export const LProfesores = () => {
           <div className="cards">
             {cards.map((card, index) => (
               <div
-                key={index}
+                key={card.id}
                 className={`card ${isSelectionMode ? 'selectable' : ''} ${selectedCards.includes(index) ? 'selected' : ''}`}
                 onClick={() => isSelectionMode && toggleCardSelection(index)}
               >
                 {isSelectionMode && <input type="checkbox" checked={selectedCards.includes(index)} onChange={() => toggleCardSelection(index)} />}
                 <img src={card.photo ? card.photo : Male} alt="Avatar" className="avatar" />
-                <p>{card.name ? card.name : `Profesor ${index + 1}`}</p>
-                <img 
-                  src={NotificationIcon} 
-                  alt="Notificar" 
-                  className="notification-icon" 
+                <div className="card-content">
+                  <p>{card.nombre} {card.ape_paterno} {card.ape_materno}</p>
+                </div>
+                <img
+                  src={NotificationIcon}
+                  alt="Notificar"
+                  className="notification-icon"
                   onClick={() => handleNotifyClick(index)}
                 />
               </div>
@@ -134,75 +183,72 @@ export const LProfesores = () => {
             )}
           </div>
         </div>
+
         {isModalVisible && (
           <div className="modal">
             <div className="modal-content">
-              <p>¿Estás seguro de que quieres eliminar las tarjetas seleccionadas?</p>
-              <div className="modal-buttons">
-                <button onClick={removeSelectedCards} className="modal-button yes">Sí</button>
-                <button onClick={handleCancelClick} className="modal-button no">No</button>
-              </div>
+              <h2>Confirmar Eliminación</h2>
+              <p>¿Estás seguro de que quieres eliminar los elementos seleccionados?</p>
+              <button onClick={removeSelectedCards}>Sí</button>
+              <button onClick={handleCancelClick}>No</button>
             </div>
           </div>
         )}
+
         {isAddModalVisible && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Añadir Profesor</h2>
-              <div className="add-form">
-                <div className="photo-selection">
-                  <img src={newProfessor.photo} alt="Profesor" className="avatar" />
-                  <button onClick={handlePhotoChange}>Cambiar Foto</button>
-                </div>
-                <div className="input-group">
-                  <label>Nombre:</label>
-                  <input
-                    type="text"
-                    value={newProfessor.name}
-                    onChange={(e) => setNewProfessor({ ...newProfessor, name: e.target.value })}
-                  />
-                  <label>Materia:</label>
-                  <input
-                    type="text"
-                    value={newProfessor.subject}
-                    onChange={(e) => setNewProfessor({ ...newProfessor, subject: e.target.value })}
-                  />
-                    <label>Correo electronico:</label>
-                  <input
-                    type="gmail"
-                    value={newProfessor.subject}
-                    onChange={(e) => setNewProfessor({ ...newProfessor, subject: e.target.value })}
-                  />
-                </div>
-                <div className="modal-buttons">
-                  <button onClick={handleAddProfessor} className="modal-button yes">Añadir</button>
-                  <button onClick={() => setIsAddModalVisible(false)} className="modal-button no">Cancelar</button>
-                </div>
+              <h2>Agregar Profesor</h2>
+              <div className='input-group'>
+              <input
+                type="text"
+                placeholder="Nombre"
+                value={newProfessor.nombre}
+                onChange={(e) => setNewProfessor({ ...newProfessor, nombre: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Apellido Paterno"
+                value={newProfessor.ape_paterno}
+                onChange={(e) => setNewProfessor({ ...newProfessor, ape_paterno: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Apellido Materno"
+                value={newProfessor.ape_materno}
+                onChange={(e) => setNewProfessor({ ...newProfessor, ape_materno: e.target.value })}
+              />
+              <input
+                type="email"
+                placeholder="Correo"
+                value={newProfessor.correo}
+                onChange={(e) => setNewProfessor({ ...newProfessor, correo: e.target.value })}
+              />
+              </div>
+              <div className="modal-buttons">
+              <button onClick={addCard}>Agregar</button>
+              <button onClick={() => setIsAddModalVisible(false)}>Cancelar</button>
               </div>
             </div>
           </div>
         )}
+
         {isNotifyModalVisible && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Notificación</h2>
-              <p>¿De qué quieres notificar al maestro?</p>
-
-              <div className='modal-buttons'>
-
-       <button className='modal-button yes'>Regresar el cañon.</button>
-       
-       <button className='modal-button yes'>Reportar el estado del cañon</button>
-  
-              </div>
-              <div className="modal-buttons">
-                <button onClick={handleSendNotification} className="modal-button-notf">Notificar</button>
-                <button onClick={() => setIsNotifyModalVisible(false)} className="modal-button-notf">Cancelar</button>
-              </div>
+              <h2>Enviar Notificación</h2>
+              <p>Enviar notificación a {currentProfessor.nombre}:</p>
+              <textarea
+                value={notifyMessage}
+                onChange={(e) => setNotifyMessage(e.target.value)}
+                placeholder="Escribe tu mensaje aquí..."
+              />
+              <button onClick={handleSendNotification}>Enviar</button>
+              <button onClick={() => setIsNotifyModalVisible(false)}>Cancelar</button>
             </div>
           </div>
         )}
       </body>
     </>
   );
-};
+}

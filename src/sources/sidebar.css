@@ -11,6 +11,7 @@
   border-top-left-radius: 5vh;
   border-bottom-left-radius: 30px;
   margin-top: 7vh;
+  overflow: auto;
 }
 
 .sidebar.expanded {
@@ -85,8 +86,7 @@ justify-content: space-around;
 .subcont-2-1 {
   height: 100%;
   display: flex;
-  width: 65%;
-    overflow: auto  ;
+
 
 
 

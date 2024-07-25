@@ -3,7 +3,7 @@ import '../sources/LP.css'
 import Fondo from "../assets/fondo.jpg";
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Histograma from '../components/Histograma';
+import HorizontalBars from '../components/HorizontalBars';
 import Barras from '../components/Barras';
 
 import "../sources/estadisticas.css"
@@ -38,7 +38,7 @@ export const Estadisticas = () => {
 <a>Profesores</a>
 <div className='cont-graficas-prof'>
 <div className='grafica-histo'>
-<Histograma/>
+<HorizontalBars/>
 </div>
 <div className='grafica-barras'>
   <Barras/>

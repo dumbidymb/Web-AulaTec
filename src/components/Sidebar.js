@@ -6,7 +6,7 @@ import Timeline from './Timeline';
 import Idcard from './Idcard';
 import BarChartComponent from './BarChartComponent';
 
-const Sidebar = ({ showButtons }) => {
+const Sidebar = ({ showButtons, selectedPrestamo }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleSidebar = () => {
@@ -18,26 +18,23 @@ const Sidebar = ({ showButtons }) => {
       <button onClick={toggleSidebar} className="toggle-btn">
         {isExpanded ? 'Close' : 'Open'} 
       </button>
-      {showButtons ? (
+      {showButtons && selectedPrestamo ? (
         <div className='content-2'>
           <header>
             <img style={{width:100}} src={Male} alt="Descripción de la imagen" />
             <a className='linea'/>
+            
           </header>
           <div className='super-sub-cont'>
-
-          <div className='subcont-2'>
-          <Timeline/>
-          </div>
-          <div className='subcont-2-1'>
-            <div className='bt-subcont'>
-        
-   <Idcard/>
-<BarChartComponent/>
+            <div className='subcont-2'>
+              <Timeline selectedPrestamo={selectedPrestamo} />
             </div>
-            
-          
-          </div>
+            <div className='subcont-2-1'>
+              <div className='bt-subcont'>
+                <Idcard selectedPrestamo={selectedPrestamo} />
+             
+              </div>
+            </div>
           </div>
         </div>
       ) : (

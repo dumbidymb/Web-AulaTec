@@ -7,24 +7,31 @@ import {
   Slider,
 } from '@mui/material';
 import { ScatterChart } from '@mui/x-charts/ScatterChart';
-
-// Generar datos aleatorios
-const generateRandomData = (numPoints) => {
-  const data = [];
-  for (let i = 0; i < numPoints; i++) {
-    const uso = Math.random() * 200; // Uso entre 0 y 200 minutos
-    const accidentes = Math.random() * 15; // Accidentes entre 0 y 15
-    data.push({ uso, accidentes, id: `data-${i}` });
-  }
-  return data;
-};
-
-const protectorData = generateRandomData(50); // Generar 50 puntos de datos aleatorios
+import axios from 'axios';
 
 export default function Dispersion() {
   const [voronoiMaxRadius, setVoronoiMaxRadius] = React.useState(25);
   const [disableVoronoi, setDisableVoronoi] = React.useState(false);
   const [undefinedRadius, setUndefinedRadius] = React.useState(true);
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/prestamos/disponibilidad');
+        const fetchedData = response.data.map(item => ({
+          uso: item.total_horas_usadas,
+          accidentes: item.porcentaje_disponibilidad,
+          id: item.proyector_nombre,
+        }));
+        setData(fetchedData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleMaxRadiusChange = (event, newValue) => {
     if (typeof newValue !== 'number') {
@@ -39,11 +46,11 @@ export default function Dispersion() {
         height={300}
         disableVoronoi={disableVoronoi}
         voronoiMaxRadius={undefinedRadius ? undefined : voronoiMaxRadius}
-        dataset={protectorData}
+        dataset={data}
         series={[
           {
-            label: 'Uso de Protectores vs Accidentes',
-            data: protectorData.map((v) => ({ x: v.uso, y: v.accidentes, id: v.id })),
+            label: 'Uso de Protectores vs Disponibilidad',
+            data: data.map((v) => ({ x: v.uso, y: v.accidentes, id: v.id })),
           },
         ]}
       />

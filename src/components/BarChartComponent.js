@@ -1,38 +1,53 @@
-// src/components/BarChartComponent.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
-const BarChartComponent = () => {
-  const dataset = [
-    { day: 'Lunes', hours: 6 },
-    { day: 'Martes', hours: 7 },
-    { day: 'Miercoles', hours: 8 },
-    { day: 'Jueves', hours: 5 },
-    { day: 'Viernes', hours: 6 },
-  ];
+const BarChartComponent = ({ maestroId }) => {
+  const [dataset, setDataset] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/prestamos/prestamo_horas', {
+          maestro_id: maestroId,
+        });
+        const data = response.data.prestamos.map(item => ({
+          day: item.day,
+          hours: Math.abs(item.hours),
+        }));
+        setDataset(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    if (maestroId) {
+      fetchData();
+    }
+  }, [maestroId]);
 
   const valueFormatter = (value) => `${value}h`;
 
   const chartSetting = {
     yAxis: [
       {
-        label: 'Hours Worked',
+        label: 'Horas Usadas',
         valueFormatter,
         scaleType: 'linear',
         min: 0,
-        max: 8,
+        max: 24,
         tickInterval: 1,
       },
     ],
     xAxis: [
       {
-        label: 'Days of the Week',
+        label: 'Días de la Semana',
         dataKey: 'day',
         scaleType: 'band',
       },
     ],
-    series: [{ dataKey: 'hours', label: 'Hours Worked', valueFormatter }],
+    series: [{ dataKey: 'hours', label: 'Horas Usadas', valueFormatter }],
     height: 300,
     sx: {
       [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
@@ -42,7 +57,7 @@ const BarChartComponent = () => {
   };
 
   return (
-    <div style={{ width: '550px' }}>
+    <div style={{ width: '600px' }}>
       <BarChart dataset={dataset} {...chartSetting} />
     </div>
   );

@@ -1,8 +1,8 @@
 .card {
   background-color: #87ceeb;
   border-radius: 20px;
-  width: 200px;
-  height: 100px;
+  width: 250px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,17 +18,19 @@
 }
 
 .card-container {
-  width: 100%;
+  width: 200vh;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
 }
 
 .cards {
   display: flex;
   flex-wrap: wrap;
   max-width: 70%;
+
 }
 
 .buttons {
@@ -139,11 +141,25 @@ textarea {
 
 .viñeta{
   width: 30px;
-  height: 100px;
+  height: 100%;
   background-color: #7bacd5;
   position: absolute;
   right: 0.5%;
   bottom: 0%;
   border-bottom-right-radius:20px ;
   border-top-right-radius:20px ;
+  cursor: pointer;
+}
+
+.viñeta.green {
+  background-color: green;
+}
+
+.viñeta.red {
+  background-color: red;
+}
+
+.bodi-lp{
+  width: 100vh;
+  height: 100%;
 }

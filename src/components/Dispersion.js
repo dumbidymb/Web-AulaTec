@@ -18,7 +18,7 @@ export default function Dispersion() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/prestamos/disponibilidad');
+        const response = await axios.get('http://18.232.46.147/prestamos/disponibilidad');
         const fetchedData = response.data.map(item => ({
           uso: item.total_horas_usadas,
           accidentes: item.porcentaje_disponibilidad,

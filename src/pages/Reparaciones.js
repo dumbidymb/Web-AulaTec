@@ -13,7 +13,7 @@ export const Reparaciones = () => {
     // Obtener datos de los proyectores desde el servidor
     const fetchProyectores = async () => {
       try {
-        const response = await fetch('http://localhost:5000/proyectores');
+        const response = await fetch('http://18.232.46.147/proyectores');
         const data = await response.json();
         // Filtrar proyectores con estado 'deshabilitado'
         const proyectoresDeshabilitados = data.filter(proyector => proyector.status === 'deshabilitado');

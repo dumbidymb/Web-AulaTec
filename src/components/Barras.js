@@ -9,7 +9,7 @@ const Barras = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/prestamos/horas');
+        const response = await axios.get('http://18.232.46.147/prestamos/horas');
         const data = response.data.map(item => ({
           proyector_nombre: item.proyector_nombre,
           total_horas_usadas: Math.abs(item.total_horas_usadas),

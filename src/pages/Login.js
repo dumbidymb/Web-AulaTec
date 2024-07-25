@@ -11,7 +11,7 @@ export const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/user/login', {
+      const response = await fetch('http://18.232.46.147/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

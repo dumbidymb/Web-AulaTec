@@ -19,7 +19,7 @@ export const LProyectores = () => {
   useEffect(() => {
     const fetchProjectors = async () => {
       try {
-        const response = await fetch('http://localhost:5000/proyectores');
+        const response = await fetch('http://18.232.46.147/proyectores');
         if (response.ok) {
           const data = await response.json();
           setCards(data);
@@ -36,7 +36,7 @@ export const LProyectores = () => {
 
   const addCard = async () => {
     try {
-      const response = await fetch('http://localhost:5000/proyectores/', {
+      const response = await fetch('http://18.232.46.147/proyectores/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -92,7 +92,7 @@ export const LProyectores = () => {
   const deleteSelectedCards = async () => {
     try {
       await Promise.all(selectedCards.map(async (id) => {
-        const response = await fetch(`http://localhost:5000/proyectores/${id}`, {
+        const response = await fetch(`http://18.232.46.147/proyectores/${id}`, {
           method: 'DELETE'
         });
         if (!response.ok) {
@@ -118,7 +118,7 @@ export const LProyectores = () => {
   
     try {
       const updatedStatus = selectedCardForToggle.status === 'habilitado' ? 'deshabilitado' : 'habilitado';
-      const response = await fetch(`http://localhost:5000/proyectores/toggle_status/${selectedCardForToggle.id}`, {
+      const response = await fetch(`http://18.232.46.147/proyectores/toggle_status/${selectedCardForToggle.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'

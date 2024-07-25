@@ -7,7 +7,7 @@ const Timeline = ({ selectedPrestamo }) => {
 
   useEffect(() => {
     if (selectedPrestamo) {
-      fetch('http://localhost:5000/prestamos/prestamo_horas', {
+      fetch('http://18.232.46.147/prestamos/prestamo_horas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

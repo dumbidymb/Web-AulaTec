@@ -12,7 +12,7 @@ export const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5000/prestamos/prestamos')
+    fetch('http://18.232.46.147/prestamos/prestamos')
       .then(response => response.json())
       .then(data => setPrestamos(data))
       .catch(error => console.error('Error fetching data:', error));

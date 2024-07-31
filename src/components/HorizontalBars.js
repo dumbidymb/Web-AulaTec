@@ -8,7 +8,7 @@ const Histograma = () => {
   useEffect(() => {
     const fetchHorasUsadas = async () => {
       try {
-        const response = await axios.get('http://18.232.46.147/prestamos/mae_horas');
+        const response = await axios.get('https://aulatec.zapto.org/prestamos/mae_horas');
         const data = response.data.map(item => ({
           maestro_nombre: item.maestro_nombre,
           total_horas_usadas: item.total_horas_usadas,

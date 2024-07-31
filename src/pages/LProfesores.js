@@ -23,7 +23,7 @@ export const LProfesores = () => {
     // Fetch professors from the backend
     const fetchProfessors = async () => {
       try {
-        const response = await fetch('http://18.232.46.147/maestros/');
+        const response = await fetch('https://aulatec.zapto.org/maestros/');
         if (response.ok) {
           const data = await response.json();
           setCards(data);
@@ -40,7 +40,7 @@ export const LProfesores = () => {
 
   const addCard = async () => {
     try {
-      const response = await fetch('http://18.232.46.147/maestros/', {
+      const response = await fetch('https://aulatec.zapto.org/maestros/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ export const LProfesores = () => {
 
   const removeSelectedCards = async () => {
     try {
-      const response = await fetch('http://18.232.46.147/maestros/delete_multiple', {
+      const response = await fetch('https://aulatec.zapto.org/maestros/delete_multiple', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

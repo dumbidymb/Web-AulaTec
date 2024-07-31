@@ -9,7 +9,7 @@ const BarChartComponent = ({ maestroId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://18.232.46.147/prestamos/prestamo_horas', {
+        const response = await axios.post('https://aulatec.zapto.org/prestamos/prestamo_horas', {
           maestro_id: maestroId,
         });
         const data = response.data.prestamos.map(item => ({

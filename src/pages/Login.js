@@ -12,7 +12,7 @@ export const Login = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://18.232.46.147/user/login', {
+      const response = await fetch('https://aulatec.zapto.org//user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

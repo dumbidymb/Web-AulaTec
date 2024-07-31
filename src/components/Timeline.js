@@ -7,7 +7,7 @@ const Timeline = ({ selectedPrestamo }) => {
 
   useEffect(() => {
     if (selectedPrestamo) {
-      fetch('http://18.232.46.147/prestamos/prestamo_horas', {
+      fetch('https://aulatec.zapto.org/prestamo_horas', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ const Timeline = ({ selectedPrestamo }) => {
       })
       .catch(error => console.error('Error fetching horas usadas:', error));
 
-      fetch('http://localhost:5000/prestamos/prestamo_info', {
+      fetch('https://aulatec.zapto.org/prestamos/prestamo_info', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

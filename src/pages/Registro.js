@@ -10,7 +10,7 @@ export const Registro = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://18.232.46.147/user/register', {
+      const response = await fetch('https://aulatec.zapto.org/user/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
